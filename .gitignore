@@ -72,6 +72,7 @@ cover/
 *.mo
 
 # Django stuff:
+queueService/migrations/
 
 # Flask stuff:
 instance/
