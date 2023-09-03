@@ -8,8 +8,8 @@ RUN pip install --upgrade pip
 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-COPY ./app /code/app
+COPY . .
 
-ENV PYTHONPATH "${PYTHONPATH}:/code/app"
+ENV PYTHONPATH "${PYTHONPATH}:/code"
 
 CMD ["uvicorn", "myproject.asgi:application", "--host", "0.0.0.0", "--port", "80"]
