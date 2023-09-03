@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Station(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     user = models.ForeignKey('auth.User', related_name='stations', on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
@@ -10,7 +10,7 @@ class Station(models.Model):
 
 
 class Case(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     stations = models.ManyToManyField(Station, related_name='cases')
 
     def __str__(self):
