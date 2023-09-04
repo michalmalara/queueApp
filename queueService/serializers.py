@@ -29,3 +29,9 @@ class StationRetrieveSerializer(serializers.ModelSerializer):
     @staticmethod
     def get_is_active(obj):
         return obj.user is not None
+
+
+class CaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Station
+        fields = "__all__"

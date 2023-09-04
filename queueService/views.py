@@ -1,12 +1,10 @@
 from rest_framework.decorators import api_view
-from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from queueService.models import Station
+from queueService.models import Station, Case
 from queueService.permissions import IsAdminOrReadOnly
-from queueService.serializers import StationSerializer, StationRetrieveSerializer
+from queueService.serializers import StationSerializer, StationRetrieveSerializer, CaseSerializer
 from queueService.utils import get_or_404
 
 
@@ -44,3 +42,9 @@ def remove_user_from_station(request):
     station.user = None
     station.save()
     return Response({"status": "ok"})
+
+
+class CaseViewSet(ModelViewSet):
+    queryset = Case.objects.all().order_by("id")
+    serializer_class = CaseSerializer
+    permission_classes = (IsAdminOrReadOnly,)
