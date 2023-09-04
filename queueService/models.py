@@ -17,3 +17,11 @@ class Case(models.Model):
 
     def __str__(self):
         return f"Case {self.name}"
+
+
+class Queue(models.Model):
+    case = models.ForeignKey(Case, related_name='queues', on_delete=models.CASCADE)
+    datetime_created = models.DateTimeField(auto_now_add=True)
+    datetime_completed = models.DateTimeField(blank=True, null=True)
+    is_completed = models.BooleanField(default=False)
+    station = models.ForeignKey(Station, related_name='queues', on_delete=models.CASCADE, blank=True, null=True)
