@@ -22,7 +22,7 @@ class StationViewSet(ModelViewSet):
 
 
 @api_view(["POST"])
-def set_user_to_station(request, pk):
+def assign_user_to_station(request, pk):
     station = get_or_404(Station, pk=pk)
 
     if station.user is not None:
@@ -33,5 +33,14 @@ def set_user_to_station(request, pk):
         return Response({"status": "error", "message": "User already has a station"}, status=400)
 
     station.user = request.user
+    station.save()
+    return Response({"status": "ok"})
+
+
+@api_view(["POST"])
+def remove_user_from_station(request):
+    station = get_or_404(Station, user=request.user)
+
+    station.user = None
     station.save()
     return Response({"status": "ok"})

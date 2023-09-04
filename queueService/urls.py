@@ -4,7 +4,7 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from queueService.views import StationViewSet, set_user_to_station
+from queueService.views import StationViewSet, assign_user_to_station, remove_user_from_station
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -26,9 +26,10 @@ urlpatterns = [
 
 urlpatterns += [
     path("stations/", StationViewSet.as_view({"get": "list", "post": "create"}), name="stations"),
+    path("stations/remove-user/", remove_user_from_station, name="stations"),
     path("stations/<int:pk>/", StationViewSet.as_view({"get": "retrieve", "put": "update", "delete": "destroy"}),
          name="stations"),
-    path("stations/<int:pk>/set-user/", set_user_to_station, name="stations"),
+    path("stations/<int:pk>/assign/", assign_user_to_station, name="stations"),
 ]
 
 # automatic api documentation urls
