@@ -1,10 +1,11 @@
+from django.utils import timezone
 from rest_framework import mixins
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet
 
-from queueService.models import Station, Case
+from queueService.models import Station, Case, Queue
 from queueService.permissions import IsAdminOrReadOnly
 from queueService.serializers import StationSerializer, StationRetrieveSerializer, CaseSerializer, \
     QueueCreateSerializer, QueueRetrieveSerializer
@@ -40,6 +41,15 @@ class StationViewSet(ModelViewSet):
     def remove_user_from_station(self, request):
         station = get_or_404(Station, user=request.user)
 
+        current_queues = Queue.objects.filter(station=station, is_completed=False)
+
+        if len(current_queues):
+            for queue in current_queues:
+                queue.datetime_completed = timezone.now()
+                queue.is_completed = True
+                queue.station = None
+                queue.save()
+
         station.user = None
         station.save()
         return Response({"status": "ok"})
@@ -60,11 +70,6 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
             return QueueCreateSerializer(*args, **kwargs)
         return QueueRetrieveSerializer(*args, **kwargs)
 
-    def get_permissions(self):
-        if self.action in ("list", "retrieve", "create"):
-            return (IsAuthenticated(),)
-        return (IsAdminOrReadOnly(),)
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=False):
@@ -72,18 +77,35 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
             return Response(status=201, data=QueueRetrieveSerializer(queue).data)
         return Response({"status": "error", "message": serializer.errors}, status=422)
 
-# @api_view(["GET"])
-# def call_next(request):
-#     station = get_or_404(Station, user=request.user)
-#     current_queue = Queue.objects.filter(station=station, is_completed=False)
-#     if len(current_queue):
-#         current_queue[0].is_completed = True
-#         current_queue[0].station = None
-#         current_queue[0].save()
-#
-#     if station.queue_set.filter(is_completed=False).exists():
-#         next_case = station.queue_set.filter(is_completed=False).order_by("datetime_created").first()
-#         next_case.station = station
-#         next_case.save()
-#         return Response({"status": "ok", "case": CaseSerializer(next_case).data})
-#     return Response({"status": "error", "message": "No cases in queue"}, status=400)
+    @action(methods=["POST"], detail=False, url_path="call-next", permission_classes=[IsAuthenticated])
+    def call_next(self, request):
+        station = get_or_404(Station, user=request.user)
+        cases = station.cases.all()
+        current_queues = Queue.objects.filter(station=station, is_completed=False)
+
+        if len(current_queues):
+            for queue in current_queues:
+                queue.datetime_completed = timezone.now()
+                queue.is_completed = True
+                queue.station = None
+                queue.save()
+
+        next_queue = Queue.objects.filter(is_completed=False, case__in=cases).order_by("number").first()
+        if next_queue is not None:
+            next_queue.station = station
+            next_queue.datetime_started = timezone.now()
+            next_queue.save()
+            return Response(QueueRetrieveSerializer(next_queue).data)
+
+        return Response({"status": "error", "message": "No cases in queue"}, status=400)
+
+    @action(methods=["GET"], detail=False, url_path="current", permission_classes=[IsAuthenticated])
+    def get_current_queue(self, request):
+        queues = Queue.objects.filter(
+            datetime_started__isnull=False,
+            datetime_completed__isnull=True,
+            is_completed=False
+        )
+        if queues.exists():
+            return Response(QueueRetrieveSerializer(queues.first()).data)
+        return Response({"status": "error", "message": "No current queue"}, status=400)

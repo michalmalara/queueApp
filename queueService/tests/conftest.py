@@ -58,9 +58,9 @@ def case(empty_station):
 
 
 @pytest.fixture
-def case2(empty_station):
+def case2(occupied_station):
     case = Case.objects.create(name="Second Case", symbol="B")
-    case.stations.set([empty_station])
+    case.stations.set([occupied_station])
     case.save()
     return case
 

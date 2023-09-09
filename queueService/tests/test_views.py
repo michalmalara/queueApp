@@ -1,4 +1,7 @@
+import datetime
+
 import pytest
+from django.utils import timezone
 
 from queueService.tests.utils import get_token_for_user
 
@@ -103,3 +106,27 @@ class TestQueueViewSet:
         assert response.status_code == 201
         assert response.json()["case"] == case2.id
         assert response.json()["number"] == 1
+
+    def test_given_queue_and_station_when_user_calls_next_then_queue_is_assigned_to_station(
+            self,
+            client,
+            user,
+            new_queue,
+            case,
+            occupied_station
+    ):
+        occupied_station.cases.add(case)
+        occupied_station.save()
+
+        new_queue.case = case
+        new_queue.datetime_started = timezone.now()
+        new_queue.save()
+
+        response = client.post(
+            "/api/queue/call-next/",
+            HTTP_AUTHORIZATION=get_token_for_user(user),
+        )
+
+        assert response.status_code == 200
+        assert response.json()["case"] == case.id
+        assert response.json()["number"] == new_queue.number

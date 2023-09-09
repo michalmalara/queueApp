@@ -55,4 +55,4 @@ class QueueCreateSerializer(serializers.ModelSerializer):
 class QueueRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Queue
-        fields = ["case", "number"]
+        fields = ["id", "case", "number"]
