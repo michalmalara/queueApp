@@ -2,6 +2,7 @@ from django.utils import timezone
 from rest_framework import mixins
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet
 
@@ -23,7 +24,7 @@ class StationViewSet(ModelViewSet):
         return StationSerializer
 
     @action(methods=["POST"], detail=True, url_path="assign", permission_classes=[IsAuthenticated])
-    def assign_user_to_station(self, request, pk):
+    def assign_user_to_station(self, request: Request, pk: int):
         station = get_or_404(Station, pk=pk)
 
         if station.user is not None:
@@ -38,7 +39,7 @@ class StationViewSet(ModelViewSet):
         return Response({"status": "ok"})
 
     @action(methods=["POST"], detail=False, url_path="remove-user", permission_classes=[IsAuthenticated])
-    def remove_user_from_station(self, request):
+    def remove_user_from_station(self, request: Request):
         station = get_or_404(Station, user=request.user)
 
         current_queues = Queue.objects.filter(station=station, is_completed=False)
@@ -70,7 +71,7 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
             return QueueCreateSerializer(*args, **kwargs)
         return QueueRetrieveSerializer(*args, **kwargs)
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=False):
             queue = serializer.create(serializer.validated_data)
@@ -78,7 +79,7 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
         return Response({"status": "error", "message": serializer.errors}, status=422)
 
     @action(methods=["POST"], detail=False, url_path="call-next", permission_classes=[IsAuthenticated])
-    def call_next(self, request):
+    def call_next(self, request: Request):
         station = get_or_404(Station, user=request.user)
         cases = station.cases.all()
         current_queues = Queue.objects.filter(station=station, is_completed=False)
@@ -100,7 +101,7 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
         return Response({"status": "error", "message": "No cases in queue"}, status=400)
 
     @action(methods=["GET"], detail=False, url_path="current", permission_classes=[IsAuthenticated])
-    def get_current_queue(self, request):
+    def get_current_queue(self, request: Request):
         queues = Queue.objects.filter(
             datetime_started__isnull=False,
             datetime_completed__isnull=True,

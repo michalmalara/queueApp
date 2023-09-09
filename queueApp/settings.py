@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "oauth2_provider",
     "rest_framework",
     "drf_yasg",
 
@@ -113,7 +112,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    "TOKEN_OBTAIN_SERIALIZER": "queueService.serializers.ExtendedTokenObtainPairSerializer",
+    "TOKEN_OBTAIN_SERIALIZER": "queueService.api.serializers.ExtendedTokenObtainPairSerializer",
     "ROTATE_REFRESH_TOKENS": True,
     "SIGNING_KEY": os.environ.get("JWT_SECRET_KEY"),
 }
