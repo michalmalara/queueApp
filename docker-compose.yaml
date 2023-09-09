@@ -8,3 +8,5 @@ services:
       - .:/code
     env_file:
       - secrets.env
+    environment:
+      - DEBUG=True
