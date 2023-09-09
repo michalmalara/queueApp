@@ -1,7 +1,9 @@
+import logging
+
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from queueService.models import Station
+from queueService.models import Station, Queue
 
 
 class ExtendedTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -35,3 +37,22 @@ class CaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Station
         fields = "__all__"
+
+
+class QueueCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Queue
+        fields = ["case"]
+
+    def create(self, validated_data):
+        last_number = Queue.objects.filter(case=validated_data.get("case")).order_by("-number").first()
+        queue = Queue.objects.create(**validated_data)
+        queue.number = last_number.number + 1 if last_number is not None else 1
+        queue.save()
+        return queue
+
+
+class QueueRetrieveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Queue
+        fields = ["case", "number"]

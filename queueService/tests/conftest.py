@@ -1,7 +1,7 @@
 import pytest
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
-from queueService.models import Station
+from queueService.models import Station, Queue, Case
 
 user_data = {
     "username": "testuser",
@@ -47,3 +47,24 @@ def empty_station():
 @pytest.fixture
 def occupied_station(user):
     return Station.objects.create(name="Test Occupied Station", user=user)
+
+
+@pytest.fixture
+def case(empty_station):
+    case = Case.objects.create(name="First Case", symbol="A")
+    case.stations.set([empty_station])
+    case.save()
+    return case
+
+
+@pytest.fixture
+def case2(empty_station):
+    case = Case.objects.create(name="Second Case", symbol="B")
+    case.stations.set([empty_station])
+    case.save()
+    return case
+
+
+@pytest.fixture
+def new_queue(case):
+    return Queue.objects.create(case=case, number=1)

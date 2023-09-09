@@ -54,3 +54,52 @@ class TestRemoveUserFromStation:
         )
 
         assert response.status_code == 404
+
+
+@pytest.mark.django_db
+class TestQueueViewSet:
+    def test_given_case_when_user_creates_new_queue_then_queue_is_created(self, client, user, case):
+        response = client.post(
+            "/api/queue/",
+            {"case": case.id},
+            HTTP_AUTHORIZATION=get_token_for_user(user),
+        )
+
+        assert response.status_code == 201
+        assert response.json()["case"] == case.id
+        assert response.json()["number"] == 1
+
+    def test_given_case_and_queue_when_user_creates_new_queue_then_queue_is_created_and_next_number_is_assigned(
+            self,
+            client,
+            user,
+            case,
+            new_queue
+    ):
+        response = client.post(
+            "/api/queue/",
+            {"case": case.id},
+            HTTP_AUTHORIZATION=get_token_for_user(user),
+        )
+
+        assert response.status_code == 201
+        assert response.json()["case"] == case.id
+        assert response.json()["number"] == new_queue.number + 1
+
+    def test_given_case_case2_and_queue_when_user_creates_new_queue_for_case2_then_queue_is_created(
+            self,
+            client,
+            user,
+            case,
+            case2,
+            new_queue
+    ):
+        response = client.post(
+            "/api/queue/",
+            {"case": case2.id},
+            HTTP_AUTHORIZATION=get_token_for_user(user),
+        )
+
+        assert response.status_code == 201
+        assert response.json()["case"] == case2.id
+        assert response.json()["number"] == 1
