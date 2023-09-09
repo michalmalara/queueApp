@@ -75,16 +75,10 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=False):
             queue = serializer.create(serializer.validated_data)
-            return Response(status=201, data=QueueRetrieveSerializer(queue).data)
+            response_data = QueueRetrieveSerializer(queue).data
+            response_data["other_queues"] = self.__get_other_queues_info(queue)
+            return Response(status=201, data=response_data)
         return Response({"status": "error", "message": serializer.errors}, status=422)
-
-    @action(methods=["GET"], detail=True, url_path="details", permission_classes=[AllowAny])
-    def get_queue_details(self, request: Request, pk: int):
-        queue = get_or_404(Queue, pk=pk)
-        response_data = QueueRetrieveSerializer(queue).data
-        response_data["other_queues"] = self.__get_other_queues_info(queue)
-
-        return Response(response_data)
 
     @action(methods=["POST"], detail=False, url_path="call-next", permission_classes=[IsAuthenticated])
     def call_next(self, request: Request):
@@ -108,6 +102,14 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
 
         return Response({"status": "error", "message": "No cases in queue"}, status=400)
 
+    @action(methods=["GET"], detail=True, url_path="details", permission_classes=[AllowAny])
+    def get_queue_details(self, request: Request, pk: int):
+        queue = get_or_404(Queue, pk=pk)
+        response_data = QueueRetrieveSerializer(queue).data
+        response_data["other_queues"] = self.__get_other_queues_info(queue)
+
+        return Response(response_data)
+
     @action(methods=["GET"], detail=False, url_path="current", permission_classes=[AllowAny])
     def get_current_queue(self, request: Request):
         queue = get_or_404(
@@ -122,7 +124,8 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
 
         return Response(response_data)
 
-    def __get_other_queues_info(self, queue: Queue):
+    @staticmethod
+    def __get_other_queues_info(queue: Queue):
         other_queues = Queue.objects.filter(
             datetime_started__isnull=False,
             datetime_created__lt=queue.datetime_created,
