@@ -28,3 +28,6 @@ class Queue(models.Model):
     station = models.ForeignKey(Station, related_name="queues", on_delete=models.CASCADE, blank=True, null=True,
                                 default=None)
     number = models.IntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Queue {self.case.name} {self.case.symbol}{self.number}"

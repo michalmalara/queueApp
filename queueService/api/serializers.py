@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from queueService.models import Station, Queue
+from queueService.models import Station, Queue, Case
 
 
 class ExtendedTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -33,8 +33,8 @@ class StationRetrieveSerializer(serializers.ModelSerializer):
 
 class CaseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Station
-        fields = "__all__"
+        model = Case
+        fields = ["id", "name", "symbol", "description"]
 
 
 class QueueCreateSerializer(serializers.ModelSerializer):
@@ -53,4 +53,5 @@ class QueueCreateSerializer(serializers.ModelSerializer):
 class QueueRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Queue
-        fields = ["id", "case", "number"]
+        fields = ["id", "case", "number", "datetime_created", "datetime_started", "datetime_completed", "is_completed",
+                  "station"]
