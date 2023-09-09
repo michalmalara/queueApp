@@ -1,7 +1,6 @@
 import pytest
 
-from queueService.models import Station
-from queueService.serializers import StationRetrieveSerializer
+from queueService.api.serializers import StationRetrieveSerializer
 
 
 @pytest.mark.django_db
