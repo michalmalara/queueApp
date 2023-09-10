@@ -10,3 +10,16 @@ services:
       - secrets.env
     environment:
       - DEBUG=True
+      - REDIS_HOST=redis://redis:6379/0
+    depends_on:
+      - redis
+
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis
+    command: [ "redis-server", "--bind", "0.0.0.0", "--port", "6379" ]
+
+

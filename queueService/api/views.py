@@ -1,3 +1,5 @@
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.utils import timezone
 from rest_framework import mixins
 from rest_framework.decorators import action
@@ -9,7 +11,7 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 from queueService.models import Station, Case, Queue
 from queueService.api.permissions import IsAdminOrReadOnly
 from queueService.api.serializers import StationSerializer, StationRetrieveSerializer, CaseSerializer, \
-    QueueCreateSerializer, QueueRetrieveSerializer
+    QueueSerializer
 from queueService.utils import get_or_404
 
 
@@ -65,18 +67,16 @@ class CaseViewSet(ModelViewSet):
 class QueueViewSet(ViewSet, mixins.CreateModelMixin):
     queryset = Case.objects.all().order_by("id")
     permission_classes = (IsAuthenticated,)
+    serializer_class = QueueSerializer
 
     def get_serializer(self, *args, **kwargs):
-        if self.action == "create":
-            return QueueCreateSerializer(*args, **kwargs)
-        return QueueRetrieveSerializer(*args, **kwargs)
+        return QueueSerializer(*args, **kwargs)
 
     def create(self, request: Request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=False):
             queue = serializer.create(serializer.validated_data)
-            response_data = QueueRetrieveSerializer(queue).data
-            response_data["other_queues"] = self.__get_other_queues_info(queue)
+            response_data = self.__get_other_queues_info(queue)
             return Response(status=201, data=response_data)
         return Response({"status": "error", "message": serializer.errors}, status=422)
 
@@ -98,17 +98,25 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
             next_queue.station = station
             next_queue.datetime_started = timezone.now()
             next_queue.save()
-            return Response(QueueRetrieveSerializer(next_queue).data)
+
+            response_data = self.__get_other_queues_info(next_queue)
+
+            channel_layer = get_channel_layer()
+
+            async_to_sync(channel_layer.group_send)(f"queue_{next_queue.id}",
+                                                    {"type": "queue_message",
+                                                     "message": response_data
+                                                     })
+
+            return Response(response_data)
 
         return Response({"status": "error", "message": "No cases in queue"}, status=400)
 
     @action(methods=["GET"], detail=True, url_path="details", permission_classes=[AllowAny])
     def get_queue_details(self, request: Request, pk: int):
         queue = get_or_404(Queue, pk=pk)
-        response_data = QueueRetrieveSerializer(queue).data
-        response_data["other_queues"] = self.__get_other_queues_info(queue)
 
-        return Response(response_data)
+        return Response(self.__get_other_queues_info(queue))
 
     @action(methods=["GET"], detail=False, url_path="current", permission_classes=[AllowAny])
     def get_current_queue(self, request: Request):
@@ -119,17 +127,15 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
             is_completed=False
         )
 
-        response_data = QueueRetrieveSerializer(queue).data
-        response_data["other_queues"] = self.__get_other_queues_info(queue)
+        return Response(self.__get_other_queues_info(queue))
 
-        return Response(response_data)
-
-    @staticmethod
-    def __get_other_queues_info(queue: Queue):
+    def __get_other_queues_info(self, queue: Queue):
+        response_data = self.get_serializer(queue).data
         other_queues = Queue.objects.filter(
             datetime_started__isnull=False,
             datetime_created__lt=queue.datetime_created,
             case=queue.case
         ).count()
+        response_data["other_queues"] = other_queues
 
-        return other_queues
+        return response_data

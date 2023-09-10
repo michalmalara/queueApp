@@ -37,10 +37,13 @@ class CaseSerializer(serializers.ModelSerializer):
         fields = ["id", "name", "symbol", "description"]
 
 
-class QueueCreateSerializer(serializers.ModelSerializer):
+class QueueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Queue
-        fields = ["id", "case"]
+        fields = ["id", "case", "number", "datetime_created", "datetime_started", "datetime_completed", "is_completed",
+                  "station"]
+        read_only_fields = ["id", "number", "datetime_created", "datetime_started", "datetime_completed", "station",
+                            "is_completed"]
 
     def create(self, validated_data):
         last_number = Queue.objects.filter(case=validated_data.get("case")).order_by("-number").first()
@@ -48,10 +51,3 @@ class QueueCreateSerializer(serializers.ModelSerializer):
         queue.number = last_number.number + 1 if last_number is not None else 1
         queue.save()
         return queue
-
-
-class QueueRetrieveSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Queue
-        fields = ["id", "case", "number", "datetime_created", "datetime_started", "datetime_completed", "is_completed",
-                  "station"]
