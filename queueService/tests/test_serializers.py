@@ -1,6 +1,16 @@
 import pytest
 
-from queueService.api.serializers import StationSerializer, QueueSerializer
+from queueService.api.serializers import StationSerializer, QueueSerializer, ExtendedTokenObtainPairSerializer
+from queueService.tests.conftest import user_data
+
+
+@pytest.mark.django_db
+class TestTokenSerializer:
+    def test_given_user_when_token_obtain_pair_serializer_called_then_token_contains_username(self, user):
+        serializer = ExtendedTokenObtainPairSerializer(
+            data={"username": user_data.get("username"), "password": user_data.get("password")}).get_token(
+            user)
+        assert serializer["username"] == user.username
 
 
 @pytest.mark.django_db
