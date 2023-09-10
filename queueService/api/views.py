@@ -10,7 +10,7 @@ from rest_framework.viewsets import ModelViewSet, ViewSet
 
 from queueService.models import Station, Case, Queue
 from queueService.api.permissions import IsAdminOrReadOnly
-from queueService.api.serializers import StationSerializer, StationRetrieveSerializer, CaseSerializer, \
+from queueService.api.serializers import StationSerializer, CaseSerializer, \
     QueueSerializer
 from queueService.utils import get_or_404
 
@@ -21,8 +21,6 @@ class StationViewSet(ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 
     def get_serializer_class(self):
-        if self.action in ("get", "list", "retrieve"):
-            return StationRetrieveSerializer
         return StationSerializer
 
     @action(methods=["POST"], detail=True, url_path="assign", permission_classes=[IsAuthenticated])

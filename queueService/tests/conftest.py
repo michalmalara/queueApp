@@ -68,3 +68,8 @@ def case2(occupied_station):
 @pytest.fixture
 def new_queue(case):
     return Queue.objects.create(case=case, number=1)
+
+
+@pytest.fixture
+def new_queue2(case2):
+    return Queue.objects.create(case=case2, number=1)

@@ -14,17 +14,12 @@ class ExtendedTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class StationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Station
-        fields = ["name"]
-
-
-class StationRetrieveSerializer(serializers.ModelSerializer):
     is_active = serializers.SerializerMethodField()
 
     class Meta:
         model = Station
         fields = ["id", "name", "is_active"]
+        read_only_fields = ["id", "is_active"]
 
     @staticmethod
     def get_is_active(obj):
