@@ -16,7 +16,7 @@ class ExtendedTokenObtainPairSerializer(TokenObtainPairSerializer):
 class StationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Station
-        fields = "__all__"
+        fields = ["name"]
 
 
 class StationRetrieveSerializer(serializers.ModelSerializer):
@@ -24,7 +24,7 @@ class StationRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Station
-        fields = ("name", "is_active")
+        fields = ["id", "name", "is_active"]
 
     @staticmethod
     def get_is_active(obj):
@@ -40,7 +40,7 @@ class CaseSerializer(serializers.ModelSerializer):
 class QueueCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Queue
-        fields = ["case"]
+        fields = ["id", "case"]
 
     def create(self, validated_data):
         last_number = Queue.objects.filter(case=validated_data.get("case")).order_by("-number").first()
