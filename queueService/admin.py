@@ -5,14 +5,14 @@ from queueService.models import Station, Case, Queue
 
 @admin.register(Station)
 class StationAdmin(admin.ModelAdmin):
-    list_display = ("name", "user")
+    list_display = ("id", "name", "user")
 
 
 @admin.register(Case)
 class CaseAdmin(admin.ModelAdmin):
-    list_display = ("name",)
+    list_display = ("id", "name",)
 
 
 @admin.register(Queue)
 class QueueAdmin(admin.ModelAdmin):
-    list_display = ("case", "number", "datetime_created", "datetime_completed", "is_completed", "station")
+    list_display = ("id", "case", "number", "datetime_created", "datetime_completed", "is_completed", "station")
