@@ -33,12 +33,18 @@ class CaseSerializer(serializers.ModelSerializer):
 
 
 class QueueSerializer(serializers.ModelSerializer):
+    case_symbol = serializers.SerializerMethodField()
+
     class Meta:
         model = Queue
-        fields = ["id", "case", "number", "datetime_created", "datetime_started", "datetime_completed", "is_completed",
+        fields = ["id", "case", "case_symbol", "number", "datetime_created", "datetime_started", "datetime_completed",
+                  "is_completed",
                   "station"]
         read_only_fields = ["id", "number", "datetime_created", "datetime_started", "datetime_completed", "station",
                             "is_completed"]
+
+    def get_case_symbol(self, obj):
+        return obj.case.symbol
 
     def create(self, validated_data):
         last_number = Queue.objects.filter(case=validated_data.get("case")).order_by("-number").first()

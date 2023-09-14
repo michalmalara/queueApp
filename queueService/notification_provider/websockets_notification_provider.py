@@ -8,9 +8,9 @@ class WebsocketsNotificationProvider(NotificationProviderAbstract):
     def __init__(self):
         self.__channel_layer = get_channel_layer()
 
-    def update_queue_info(self, queue_id: str, queue_data: dict) -> None:
+    def update_queue_info(self, queue_data: dict) -> None:
         async_to_sync(self.__channel_layer.group_send)(
-            f"queue_{queue_id}",
+            f"queue_{queue_data.get('id')}",
             {
                 "type": "queue_message",
                 "message": queue_data

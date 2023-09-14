@@ -15,4 +15,5 @@ class CaseAdmin(admin.ModelAdmin):
 
 @admin.register(Queue)
 class QueueAdmin(admin.ModelAdmin):
-    list_display = ("id", "case", "number", "datetime_created", "datetime_completed", "is_completed", "station")
+    list_display = (
+    "id", "case", "number", "datetime_created", "datetime_started", "datetime_completed", "is_completed", "station")

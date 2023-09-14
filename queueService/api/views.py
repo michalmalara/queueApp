@@ -13,7 +13,8 @@ from queueService.api.permissions import IsAdminOrReadOnly
 from queueService.api.serializers import StationSerializer, CaseSerializer, \
     QueueSerializer
 from queueService.notification_provider.websockets_notification_provider import WebsocketsNotificationProvider
-from queueService.utils import get_or_404
+from queueService.utils import get_or_404, get_other_queues_info
+from queueService.tasks import update_queues_info
 
 
 class StationViewSet(ModelViewSet):
@@ -77,7 +78,7 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid(raise_exception=False):
             queue = serializer.create(serializer.validated_data)
-            response_data = self.__get_other_queues_info(queue)
+            response_data = get_other_queues_info(queue)
             return Response(status=201, data=response_data)
         return Response({"status": "error", "message": serializer.errors}, status=422)
 
@@ -100,9 +101,9 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
             next_queue.datetime_started = timezone.now()
             next_queue.save()
 
-            response_data = self.__get_other_queues_info(next_queue)
+            response_data = get_other_queues_info(next_queue)
 
-            self.notifications_provider.update_queue_info(next_queue.id, response_data)
+            update_queues_info.delay()
 
             return Response(response_data)
 
@@ -112,7 +113,7 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
     def get_queue_details(self, request: Request, pk: int):
         queue = get_or_404(Queue, pk=pk)
 
-        return Response(self.__get_other_queues_info(queue))
+        return Response(get_other_queues_info(queue))
 
     @action(methods=["GET"], detail=False, url_path="current", permission_classes=[AllowAny])
     def get_current_queue(self, request: Request):
@@ -123,15 +124,4 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
             is_completed=False
         )
 
-        return Response(self.__get_other_queues_info(queue))
-
-    def __get_other_queues_info(self, queue: Queue):
-        response_data = self.get_serializer(queue).data
-        other_queues = Queue.objects.filter(
-            datetime_started__isnull=False,
-            datetime_created__lt=queue.datetime_created,
-            case=queue.case
-        ).count()
-        response_data["other_queues"] = other_queues
-
-        return response_data
+        return Response(get_other_queues_info(queue))
