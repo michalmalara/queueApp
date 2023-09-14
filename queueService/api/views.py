@@ -12,6 +12,7 @@ from queueService.models import Station, Case, Queue
 from queueService.api.permissions import IsAdminOrReadOnly
 from queueService.api.serializers import StationSerializer, CaseSerializer, \
     QueueSerializer
+from queueService.notification_provider.websockets_notification_provider import WebsocketsNotificationProvider
 from queueService.utils import get_or_404
 
 
@@ -67,6 +68,8 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
     permission_classes = (IsAuthenticated,)
     serializer_class = QueueSerializer
 
+    notifications_provider = WebsocketsNotificationProvider()
+
     def get_serializer(self, *args, **kwargs):
         return QueueSerializer(*args, **kwargs)
 
@@ -99,12 +102,7 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
 
             response_data = self.__get_other_queues_info(next_queue)
 
-            channel_layer = get_channel_layer()
-
-            async_to_sync(channel_layer.group_send)(f"queue_{next_queue.id}",
-                                                    {"type": "queue_message",
-                                                     "message": response_data
-                                                     })
+            self.notifications_provider.update_queue_info(next_queue.id, response_data)
 
             return Response(response_data)
 
