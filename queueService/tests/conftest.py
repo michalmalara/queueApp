@@ -1,6 +1,7 @@
 import pytest
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
+
 from queueService.models import Station, Queue, Case
 
 user_data = {

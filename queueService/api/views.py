@@ -1,5 +1,3 @@
-from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
 from django.utils import timezone
 from rest_framework import mixins
 from rest_framework.decorators import action
@@ -8,13 +6,13 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSet
 
-from queueService.models import Station, Case, Queue
 from queueService.api.permissions import IsAdminOrReadOnly
 from queueService.api.serializers import StationSerializer, CaseSerializer, \
     QueueSerializer
+from queueService.models import Station, Case, Queue
 from queueService.notification_provider.websockets_notification_provider import WebsocketsNotificationProvider
-from queueService.utils import get_or_404, get_other_queues_info
 from queueService.tasks import update_queues_info
+from queueService.utils import get_or_404, get_other_queues_info
 
 
 class StationViewSet(ModelViewSet):
