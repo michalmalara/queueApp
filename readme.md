@@ -46,6 +46,31 @@ Account for kiosk that can be used by customers to sign in to queues
 - username: kiosk
 - password: kioskpass1234
 
+### Managing users and cases
+
+Cases that customers might be interested and in and users can be managed in admin panel. To access admin panel, go to
+url http://0.0.0.0:8080/admin/ and log in with admin credentials.
+
+### Signing in to queues
+
+To sign in to a queue, send POST request to url http://localhost:8080/api/queue/ with json body containing case id.
+Example:
+
+```json
+{
+  "case": 1
+}
+```
+
+Customer can subscribe to his case via websockets. To do so, connect to url ws://0.0.0.0:8080/ws/queue/{queue_id}/
+where queue_id is the id of the queue that customer wants to subscribe to. After connecting, customer will receive a
+message with new statue every time someone is called to the counter.
+
+### Calling customers to counters
+
+To call customers to counters, you must be logged in as an employee. You can call a customer by send POST request to
+url http://localhost:8080/api/queue/call-next/ with empty body.
+
 ## Testing
 
 run command `docker-compose exec web pytest` in the root directory
