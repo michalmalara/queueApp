@@ -16,7 +16,9 @@ status, and can be called to proper counters.
 
 1. Install all requirements
 2. Clone the repository
-3. Run `pip install -r requirements.txt` in the root directory
+3. Run command `pip install -r requirements.txt` in the root directory
+4. Run command `npm i` in frontend_scr/queueApp directory to install frontend dependencies
+5. Run command `npm run build` in frontend_scr/queueApp directory to build frontend
 2. Run command `docker-compose up -d` in the root directory to run the application
 3. Run command `docker-compose exec web python manage.py migrate` in the root directory to create database
 4. Run command `docker-compose exec web python manage.py loaddata db.json` in the root directory to populate database
