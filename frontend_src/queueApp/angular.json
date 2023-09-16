@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "deployUrl": "/static/frontend/",
             "outputPath": "../../static/frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -33,6 +34,7 @@
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss"
             ],
+            "outputHashing": "all",
             "scripts": []
           },
           "configurations": {

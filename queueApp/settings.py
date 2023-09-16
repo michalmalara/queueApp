@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import mimetypes
 import os
 from pathlib import Path
 
@@ -50,6 +51,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = "queueApp.urls"
@@ -57,8 +59,7 @@ ROOT_URLCONF = "queueApp.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "static")]
-        ,
+        "DIRS": [os.path.join(BASE_DIR, "static")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -70,6 +71,8 @@ TEMPLATES = [
         },
     },
 ]
+
+mimetypes.add_type("application/javascript", ".js", True)
 
 WSGI_APPLICATION = "queueApp.wsgi.application"
 ASGI_APPLICATION = "queueApp.asgi.application"
