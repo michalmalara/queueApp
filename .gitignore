@@ -393,3 +393,13 @@ pip-selfcheck.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,django,pycharm,venv
 /secrets.env
+
+# Frontend
+frontend_src/queueApp/.vscode/
+frontend_src/queueApp/node_modules/
+frontend_src/queueApp/dist/
+frontend_src/queueApp/package-lock.json
+frontend_src/queueApp/.env
+frontend_src/queueApp/.env.local
+
+static/frontend/
