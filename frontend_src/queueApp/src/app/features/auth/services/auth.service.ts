@@ -29,10 +29,6 @@ export class AuthService {
       tap((tokens) => this.doLoginUser(username, tokens)),
       map((res) => {
         return res;
-      }),
-      catchError((error) => {
-        alert(error.error);
-        return of(false);
       })
     );
   }

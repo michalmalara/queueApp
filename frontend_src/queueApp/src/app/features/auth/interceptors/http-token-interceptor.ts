@@ -29,8 +29,6 @@ export class TokenInterceptor implements HttpInterceptor {
       request = this.addToken(request, this.authService.getJwtToken());
     }
 
-    console.log("WESZLO")
-
     return next.handle(request).pipe(
       catchError((error) => {
         if (error instanceof HttpErrorResponse && error.status === 401) {

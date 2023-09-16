@@ -1,19 +1,22 @@
 <form [formGroup]="form">
-  <fieldset>
-    <legend>Login</legend>
-    <div class="form-field">
-      <label>username:</label>
-      <input name="username" formControlName="username">
-    </div>
-    <div class="form-field">
-      <label>Password:</label>
-      <input name="password" formControlName="password"
-             type="password">
-    </div>
-  </fieldset>
+  <ng-container *ngIf="loginFailed">
+    Login failed!
+  </ng-container>
+  <p>
+    <mat-form-field class="example-full-width">
+      <mat-label>Username</mat-label>
+      <input matInput placeholder="Username" [formControlName]="'username'">
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-form-field class="example-full-width">
+      <mat-label>Password</mat-label>
+      <input matInput placeholder="Username" type="password" [formControlName]="'password'">
+    </mat-form-field>
+  </p>
   <div class="form-buttons">
-    <button class="button button-primary"
-            (click)="login()">Login
+    <button mat-raised-button color="primary" type="submit" (click)="login()">
+      Login
     </button>
   </div>
 </form>
