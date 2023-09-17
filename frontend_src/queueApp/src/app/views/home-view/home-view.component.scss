@@ -1,9 +1,16 @@
 #home-view {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  align-items: stretch;
+  align-content: stretch;
+
+  #top-bar {
+    flex: 0 0 auto;
+  }
 
   #page-content {
     flex: 1 0 auto;
-    height: 100%;
+    min-height: 100%;
   }
 }
