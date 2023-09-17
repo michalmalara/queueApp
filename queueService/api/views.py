@@ -23,6 +23,12 @@ class StationViewSet(ModelViewSet):
     def get_serializer_class(self):
         return StationSerializer
 
+    @action(methods=["GET"], detail=False, url_path="available-stations")
+    def get_available_stations(self, request: Request):
+        available_stations = Station.objects.filter(user=None)
+        serializer = self.get_serializer(available_stations, many=True)
+        return Response(serializer.data)
+
     @action(methods=["POST"], detail=True, url_path="assign", permission_classes=[IsAuthenticated])
     def assign_user_to_station(self, request: Request, pk: int):
         station = get_or_404(Station, pk=pk)
