@@ -1,22 +1,26 @@
-.login-form-card {
-  max-width: 20rem;
-  margin: 10rem auto;
-}
+#login-view {
+  padding: 5rem;
 
-.login-form-card-header {
-  margin-top: 2rem;
-  text-align: center;
-}
+  .login-form-card {
+    margin: 0 auto;
+    max-width: 20rem;
+  }
 
-.login-form-card-content {
-  width: 100%;
-  padding-left: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
+  .login-form-card-header {
+    margin-top: 2rem;
+    text-align: center;
+  }
 
-.login-form-component {
-  width: 80%;
+  .login-form-card-content {
+    width: 100%;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-form-component {
+    width: 80%;
+  }
 }

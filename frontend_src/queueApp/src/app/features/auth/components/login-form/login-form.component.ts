@@ -38,7 +38,7 @@ export class LoginFormComponent {
 
     if (this.usernameFieldControl.value && this.passwordFieldControl.value) {
       this.authService.login(val.username, val.password).subscribe(() => {
-          this.router.navigate(['/'])
+          this.router.navigate(['/choose-station'])
         },
         (err) => this.loginFailed = true
       );

@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {TopBarComponent} from "./features/structure/top-bar/top-bar.component";
+import {TopBarComponent} from "./features/structure/components/top-bar/top-bar.component";
 import {RouterOutlet} from "@angular/router";
 import {MatButtonModule} from "@angular/material/button";
 import {RestClientService} from "./features/utils/services/rest-client.service";

@@ -2,18 +2,18 @@
   <ng-container *ngIf="loginFailed">
     Login failed!
   </ng-container>
-  <p>
-    <mat-form-field class="login-form-item">
+  <div class="login-form-item">
+    <mat-form-field class="login-form-input">
       <mat-label>Username</mat-label>
       <input matInput placeholder="Username" [formControlName]="'username'">
     </mat-form-field>
-  </p>
-  <p>
-    <mat-form-field class="login-form-item">
+  </div>
+  <div class="login-form-item">
+    <mat-form-field class="login-form-input">
       <mat-label>Password</mat-label>
       <input matInput placeholder="Username" type="password" [formControlName]="'password'">
     </mat-form-field>
-  </p>
+  </div>
   <div class="form-buttons">
     <button mat-raised-button color="primary" type="submit" (click)="login()">
       Login

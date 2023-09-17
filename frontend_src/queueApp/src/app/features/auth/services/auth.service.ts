@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
-import {Observable, of} from "rxjs";
+import {BehaviorSubject, Observable, of} from "rxjs";
 import {catchError, map, tap} from "rxjs/operators";
 import {Router} from "@angular/router";
 import * as wasi from "wasi";
@@ -14,6 +14,7 @@ interface TokenResponse {
   providedIn: "root",
 })
 export class AuthService {
+  public isLoggedIn$ = new BehaviorSubject<boolean>(false)
   private readonly JWT_TOKEN = "JWT_TOKEN";
   private readonly REFRESH_TOKEN = "REFRESH_TOKEN";
   private loggedUser: string | null = "";
@@ -80,11 +81,13 @@ export class AuthService {
   private storeTokens(tokens: TokenResponse) {
     localStorage.setItem(this.JWT_TOKEN, tokens.access);
     localStorage.setItem(this.REFRESH_TOKEN, tokens.refresh);
+    this.isLoggedIn$.next(true)
   }
 
   private removeTokens() {
     localStorage.removeItem(this.JWT_TOKEN);
     localStorage.removeItem(this.REFRESH_TOKEN);
+    this.isLoggedIn$.next(false)
   }
 
 }
