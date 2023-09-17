@@ -1,15 +1,15 @@
-<form [formGroup]="form">
+<form [formGroup]="form" class="login-form">
   <ng-container *ngIf="loginFailed">
     Login failed!
   </ng-container>
   <p>
-    <mat-form-field class="example-full-width">
+    <mat-form-field class="login-form-item">
       <mat-label>Username</mat-label>
       <input matInput placeholder="Username" [formControlName]="'username'">
     </mat-form-field>
   </p>
   <p>
-    <mat-form-field class="example-full-width">
+    <mat-form-field class="login-form-item">
       <mat-label>Password</mat-label>
       <input matInput placeholder="Username" type="password" [formControlName]="'password'">
     </mat-form-field>

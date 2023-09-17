@@ -70,7 +70,7 @@ export class AuthService {
   private doLogoutUser() {
     this.loggedUser = null;
     this.removeTokens();
-    this.router.navigate(["/"]);
+    this.router.navigate(["login"]);
   }
 
   private getRefreshToken() {

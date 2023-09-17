@@ -1,4 +1,22 @@
-mat-card {
-  max-width: 30rem;
+.login-form-card {
+  max-width: 20rem;
   margin: 10rem auto;
+}
+
+.login-form-card-header {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.login-form-card-content {
+  width: 100%;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form-component {
+  width: 80%;
 }
