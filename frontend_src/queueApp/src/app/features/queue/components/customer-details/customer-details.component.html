@@ -12,10 +12,10 @@
   <mat-card-content>
     <mat-list *ngIf="!!customerDetails">
       <mat-list-item>Case: {{customerDetails.case}}</mat-list-item>
-      <mat-list-item>Time created: {{customerDetails.datetimeCreated|date}}</mat-list-item>
-      <mat-list-item>Time started: {{customerDetails.datetimeStarted|date}}</mat-list-item>
+      <mat-list-item>Time created: {{customerDetails.datetimeCreated|date:"dd.MM.yy HH:mm"}}</mat-list-item>
+      <mat-list-item>Time started: {{customerDetails.datetimeStarted|date:"dd.MM.yy HH:mm"}}</mat-list-item>
       <mat-list-item *ngIf="customerDetails.isCompleted">Time
-        completed: {{customerDetails.datetimeCompleted|date}}</mat-list-item>
+        completed: {{customerDetails.datetimeCompleted|date:"dd.MM.yy HH:mm"}}</mat-list-item>
     </mat-list>
   </mat-card-content>
 </mat-card>
