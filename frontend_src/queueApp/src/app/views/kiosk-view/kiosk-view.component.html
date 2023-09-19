@@ -1,1 +1,5 @@
-<p>kiosk-view works!</p>
+<div class="cases-cards" *ngIf="!!cases">
+  <div class="case-card-wrapper" *ngFor="let _case of cases">
+    <app-case-card [case]="_case" (click)="onCaseClicked(_case)"></app-case-card>
+  </div>
+</div>

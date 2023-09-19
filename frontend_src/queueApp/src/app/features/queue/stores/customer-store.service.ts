@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Store} from "../../utils/store/store";
 import {CustomerDetails} from "../models/customer-details.model";
 import {QueueService} from "../services/queue.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 export interface CustomerDetailsState {
   customerDetails: CustomerDetails | null;
@@ -12,7 +13,8 @@ export interface CustomerDetailsState {
 })
 export class CustomerStoreService extends Store<CustomerDetailsState> {
 
-  constructor(private queueService: QueueService) {
+  constructor(private queueService: QueueService
+  ) {
     super({customerDetails: null});
     this.queueService.getCurrentCustomer().subscribe((customerDetails) => {
       this.setState({

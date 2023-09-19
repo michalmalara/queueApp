@@ -17,6 +17,10 @@ export const ROUTES: Route[] = [
     loadComponent: () => import('./views/login-view/login-view.component').then(mod => mod.LoginViewComponent)
   },
   {
+    path: 'queue/:queueId',
+    loadComponent: () => import('./views/queue-details-view/queue-details-view.component').then(mod => mod.QueueDetailsViewComponent)
+  },
+  {
     path: '**',
     loadComponent: () => import('./views/not-found-view/not-found-view.component').then(mod => mod.NotFoundViewComponent)
   }

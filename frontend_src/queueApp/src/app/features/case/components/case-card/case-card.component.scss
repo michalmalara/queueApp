@@ -1,0 +1,21 @@
+.case-card {
+  width: 15rem;
+  height: 15rem;
+
+}
+
+.case-card-header {
+  height: 3rem;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.case-card-content {
+  height: 12rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
