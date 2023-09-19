@@ -3,8 +3,12 @@
     <mat-icon>menu</mat-icon>
   </button>
   <span>Very Big Bank Customer Queue Manager</span>
-  <span>{{assignedStation}}</span>
   <span class="example-spacer"></span>
+  <ng-container *ngIf="!!assignedStation">
+    <button mat-icon-button aria-label="Unassign from the station" (click)="unassignFromStation()">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
+  </ng-container>
   <button mat-icon-button aria-label="Logout" (click)="logout()">
     <mat-icon>logout</mat-icon>
   </button>

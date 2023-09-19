@@ -6,12 +6,12 @@
       </h2>
     </ng-container>
     <ng-container *ngIf="!customerDetails">
-      <h2>Call next customer</h2>
+      <h2>Call your next customer</h2>
     </ng-container>
   </mat-card-title>
   <mat-card-content>
     <mat-list *ngIf="!!customerDetails">
-      <mat-list-item>Case: {{customerDetails.case}}</mat-list-item>
+      <mat-list-item>Case: {{customerDetails.caseName}}</mat-list-item>
       <mat-list-item>Time created: {{customerDetails.datetimeCreated|date:"dd.MM.yy HH:mm"}}</mat-list-item>
       <mat-list-item>Time started: {{customerDetails.datetimeStarted|date:"dd.MM.yy HH:mm"}}</mat-list-item>
       <mat-list-item *ngIf="customerDetails.isCompleted">Time

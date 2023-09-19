@@ -7,6 +7,7 @@ import {AuthService} from "../../../auth/services/auth.service";
 import {SidenavControlService} from "../../services/sidenav-control.service";
 import {StationStoreService} from "../../../stations/stores/station-store.service";
 import {CustomerStoreService} from "../../../queue/stores/customer-store.service";
+import {Station} from "../../../stations/models/station.model";
 
 @Component({
   selector: 'app-top-bar',
@@ -16,7 +17,7 @@ import {CustomerStoreService} from "../../../queue/stores/customer-store.service
   styleUrls: ['./top-bar.component.scss']
 })
 export class TopBarComponent implements OnInit {
-  public assignedStation = ''
+  public assignedStation: Station | null = null;
 
   constructor(
     private authService: AuthService,
@@ -27,6 +28,9 @@ export class TopBarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.stationStoreService.state$.subscribe((state) => {
+      this.assignedStation = state.station;
+    })
   }
 
   public toggleSidenav() {
@@ -34,8 +38,8 @@ export class TopBarComponent implements OnInit {
   }
 
   logout() {
-    this.stationStoreService.removeFromStation();
     this.customerStoreService.completeCurrentCustomer();
+    this.stationStoreService.removeFromStation();
 
     this.stationStoreService.state$.subscribe((state) => {
         if (state.station === null) {
@@ -43,5 +47,10 @@ export class TopBarComponent implements OnInit {
         }
       }
     )
+  }
+
+  unassignFromStation() {
+    this.customerStoreService.completeCurrentCustomer();
+    this.stationStoreService.removeFromStation();
   }
 }

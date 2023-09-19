@@ -6,6 +6,12 @@
 <ng-container *ngIf="station">
   <app-view-header
     [title]="'Station ' + station.name"/>
-  <app-call-next-customer></app-call-next-customer>
-  <app-customer-details></app-customer-details>
+  <div class="station-panel">
+    <div class="station-panel-element">
+      <app-call-next-customer></app-call-next-customer>
+    </div>
+    <div class="station-panel-element">
+      <app-customer-details></app-customer-details>
+    </div>
+  </div>
 </ng-container>

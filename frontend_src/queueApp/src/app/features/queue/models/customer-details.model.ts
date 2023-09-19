@@ -2,6 +2,7 @@ export interface CustomerDetailsModelRaw {
   id: number,
   case: number,
   case_symbol: string,
+  case_name: string,
   number: number,
   datetime_created: Date,
   datetime_started: Date | null,
@@ -15,6 +16,7 @@ export class CustomerDetails {
   id: number
   case: number
   caseSymbol: string
+  caseName: string
   number: number
   datetimeCreated: Date
   datetimeStarted: Date | null
@@ -27,6 +29,7 @@ export class CustomerDetails {
     this.id = raw.id
     this.case = raw.case
     this.caseSymbol = raw.case_symbol
+    this.caseName = raw.case_name
     this.number = raw.number
     this.datetimeCreated = new Date(raw.datetime_created)
     this.datetimeStarted = raw.datetime_started ? new Date(raw.datetime_started) : null
@@ -41,6 +44,7 @@ export class CustomerDetails {
       id: customerDetails.id,
       case: customerDetails.case,
       case_symbol: customerDetails.caseSymbol,
+      case_name: customerDetails.caseName,
       number: customerDetails.number,
       datetime_created: customerDetails.datetimeCreated,
       datetime_started: customerDetails.datetimeStarted,
