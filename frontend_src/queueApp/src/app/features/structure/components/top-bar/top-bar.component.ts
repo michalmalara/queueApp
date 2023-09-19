@@ -5,6 +5,8 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {AuthService} from "../../../auth/services/auth.service";
 import {SidenavControlService} from "../../services/sidenav-control.service";
+import {StationService} from "../../../stations/services/station.service";
+import {StationStoreService} from "../../../stations/stores/station-store.service";
 
 @Component({
   selector: 'app-top-bar',
@@ -14,10 +16,12 @@ import {SidenavControlService} from "../../services/sidenav-control.service";
   styleUrls: ['./top-bar.component.scss']
 })
 export class TopBarComponent implements OnInit {
+  public assignedStation = ''
 
   constructor(
     private authService: AuthService,
-    private sidenavControl: SidenavControlService
+    private sidenavControl: SidenavControlService,
+    private stationStoreService: StationStoreService
   ) {
   }
 
@@ -29,6 +33,13 @@ export class TopBarComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout()
+    this.stationStoreService.removeFromStation()
+
+    this.stationStoreService.state$.subscribe((state) => {
+        if (state.station === null) {
+          this.authService.logout()
+        }
+      }
+    )
   }
 }

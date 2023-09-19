@@ -20,8 +20,10 @@ class StationViewSet(ModelViewSet):
     serializer_class = StationSerializer
     permission_classes = (IsAdminOrReadOnly,)
 
-    def get_serializer_class(self):
-        return StationSerializer
+    def get_serializer(self, *args, **kwargs):
+        if self.action == "get_current_station":
+            return StationSerializer(*args, **kwargs)
+        return StationSerializer(*args, **kwargs)
 
     @action(methods=["GET"], detail=False, url_path="available-stations")
     def get_available_stations(self, request: Request):
@@ -60,6 +62,12 @@ class StationViewSet(ModelViewSet):
         station.user = None
         station.save()
         return Response({"status": "ok"})
+
+    @action(methods=["GET"], detail=False, url_path="current", permission_classes=[IsAuthenticated])
+    def get_current_station(self, request: Request):
+        station = get_or_404(Station, user=request.user)
+
+        return Response(StationSerializer(station, many=False).data)
 
 
 class CaseViewSet(ModelViewSet):
@@ -127,5 +135,18 @@ class QueueViewSet(ViewSet, mixins.CreateModelMixin):
             datetime_completed__isnull=True,
             is_completed=False
         )
+
+        return Response(get_other_queues_info(queue))
+
+    @action(methods=["POST"], detail=False, url_path="complete", permission_classes=[IsAuthenticated])
+    def complete_queue(self, request: Request):
+        station = get_or_404(Station, user=request.user)
+
+        queue = get_or_404(Queue, station=station, is_completed=False)
+
+        queue.datetime_completed = timezone.now()
+        queue.is_completed = True
+        queue.station = None
+        queue.save()
 
         return Response(get_other_queues_info(queue))

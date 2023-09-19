@@ -21,7 +21,6 @@ export class SidenavComponent implements OnInit {
 
   ngOnInit(): void {
     this.sidenavControl.isSidenavOpen().subscribe((isOpen) => {
-      console.log(isOpen)
       if (this.sidenav) {
         if (isOpen) {
           this.sidenav.open()

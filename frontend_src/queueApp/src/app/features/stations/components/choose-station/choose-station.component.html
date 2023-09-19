@@ -1,1 +1,20 @@
-{{stations |json}}
+<mat-card class="choose-station-card">
+  <mat-card-content class="choose-station-card-content">
+    <form>
+      <div>
+        <mat-form-field>
+          <mat-label>Choose a station</mat-label>
+          <mat-select [formControl]="stationFormControl">
+            <mat-select-trigger>
+              {{stationFormControl.value ? stationFormControl.value.name : ''}}
+            </mat-select-trigger>
+            <mat-option *ngFor="let station of stations" [value]="station">{{station.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <button mat-raised-button color="primary" (click)="onSubmit()">Assign me to the station</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

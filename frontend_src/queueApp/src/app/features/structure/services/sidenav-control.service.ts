@@ -11,7 +11,6 @@ export class SidenavControlService {
   }
 
   public toggleSidenav() {
-    console.log("toggleSidenav")
     this.sidenavOpen$.next(!this.sidenavOpen$.value)
   }
 
