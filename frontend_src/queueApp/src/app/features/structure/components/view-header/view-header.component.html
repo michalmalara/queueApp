@@ -1,0 +1,13 @@
+<div class="view-header-component">
+  <div class="view-header">
+    <div class="back-button" *ngIf="backUrl.length">
+      <button mat-fab color="primary" (click)="onBack()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+    </div>
+    <div class="view-title">
+      <h1>{{title}}</h1>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+</div>

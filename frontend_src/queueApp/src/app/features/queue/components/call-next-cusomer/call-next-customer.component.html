@@ -1,0 +1,10 @@
+<div class="call-next-customer-button-wrapper">
+  <div class="call-next-customer-button">
+    <button mat-raised-button class="call-next-customer-button" color="primary" (click)="onCallNextCustomer()">Call next
+      customer
+    </button>
+  </div>
+  <div class="call-next-customer-button" *ngIf="!!customerDetails && !customerDetails.isCompleted">
+    <button mat-raised-button color="warn" (click)="onCompleteCase()">Complete the case</button>
+  </div>
+</div>

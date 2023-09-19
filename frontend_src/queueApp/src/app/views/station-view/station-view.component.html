@@ -1,0 +1,11 @@
+<ng-container *ngIf="!station">
+  <app-view-header
+    [title]="'Choose a Station'"/>
+  <app-choose-station/>
+</ng-container>
+<ng-container *ngIf="station">
+  <app-view-header
+    [title]="'Station ' + station.name"/>
+  <app-call-next-customer></app-call-next-customer>
+  <app-customer-details></app-customer-details>
+</ng-container>

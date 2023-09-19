@@ -1,0 +1,21 @@
+<mat-card class="customer-details-card">
+  <mat-card-title>
+    <ng-container *ngIf="!!customerDetails">
+      <h2>Case {{customerDetails.caseSymbol}}{{customerDetails.number}}
+        <ng-container *ngIf="customerDetails.isCompleted"> - completed</ng-container>
+      </h2>
+    </ng-container>
+    <ng-container *ngIf="!customerDetails">
+      <h2>Call next customer</h2>
+    </ng-container>
+  </mat-card-title>
+  <mat-card-content>
+    <mat-list *ngIf="!!customerDetails">
+      <mat-list-item>Case: {{customerDetails.case}}</mat-list-item>
+      <mat-list-item>Time created: {{customerDetails.datetimeCreated|date}}</mat-list-item>
+      <mat-list-item>Time started: {{customerDetails.datetimeStarted|date}}</mat-list-item>
+      <mat-list-item *ngIf="customerDetails.isCompleted">Time
+        completed: {{customerDetails.datetimeCompleted|date}}</mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
