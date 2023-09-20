@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {RestClientService} from "../../utils/services/rest-client.service";
 import {Observable, throwError} from "rxjs";
-import {CustomerDetails} from "../models/customer-details.model";
+import {CustomerDetails, CustomerDetailsModelRaw} from "../models/customer-details.model";
 import {catchError, map} from "rxjs/operators";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
@@ -53,5 +53,10 @@ export class QueueService {
           return new CustomerDetails(response)
         }
       ))
+  }
+
+  public getQueueDetail(queueId: number): Observable<CustomerDetails> {
+    return this.restClient.get(`api/queue/${queueId}/details/`).pipe(
+      map((response) => new CustomerDetails(response)))
   }
 }

@@ -8,6 +8,8 @@ import {SidenavControlService} from "../../services/sidenav-control.service";
 import {StationStoreService} from "../../../stations/stores/station-store.service";
 import {CustomerStoreService} from "../../../queue/stores/customer-store.service";
 import {Station} from "../../../stations/models/station.model";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-top-bar',
@@ -38,9 +40,7 @@ export class TopBarComponent implements OnInit {
   }
 
   logout() {
-    this.customerStoreService.completeCurrentCustomer();
-    this.stationStoreService.removeFromStation();
-
+    this.unassignFromStation();
     this.stationStoreService.state$.subscribe((state) => {
         if (state.station === null) {
           this.authService.logout()

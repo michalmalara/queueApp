@@ -13,7 +13,8 @@
     <mat-list *ngIf="!!customerDetails">
       <mat-list-item>Case: {{customerDetails.caseName}}</mat-list-item>
       <mat-list-item>Time created: {{customerDetails.datetimeCreated|date:"dd.MM.yy HH:mm"}}</mat-list-item>
-      <mat-list-item>Time started: {{customerDetails.datetimeStarted|date:"dd.MM.yy HH:mm"}}</mat-list-item>
+      <mat-list-item *ngIf="customerDetails.datetimeStarted">Time
+        started: {{customerDetails.datetimeStarted|date:"dd.MM.yy HH:mm"}}</mat-list-item>
       <mat-list-item *ngIf="customerDetails.isCompleted">Time
         completed: {{customerDetails.datetimeCompleted|date:"dd.MM.yy HH:mm"}}</mat-list-item>
     </mat-list>

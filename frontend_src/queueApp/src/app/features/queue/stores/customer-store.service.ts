@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Store} from "../../utils/store/store";
 import {CustomerDetails} from "../models/customer-details.model";
 import {QueueService} from "../services/queue.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
 
 export interface CustomerDetailsState {
   customerDetails: CustomerDetails | null;

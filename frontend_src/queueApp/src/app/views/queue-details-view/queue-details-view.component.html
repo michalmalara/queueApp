@@ -1,1 +1,26 @@
-<p>queue-details-view works!</p>
+<div class="queue-details-card-wrapper">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        {{queueData?.caseSymbol}}{{queueData?.number}}
+        <ng-container *ngIf="queueData?.station">
+          <span class="queue-details-card-station">&nbsp;- go to station {{queueData?.station}}</span>
+        </ng-container>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item>Case: {{queueData?.caseName}}</mat-list-item>
+        <mat-list-item>Time created: {{queueData?.datetimeCreated|date:"dd.MM.yy HH:mm"}}</mat-list-item>
+        <mat-list-item *ngIf="queueData?.datetimeStarted">Time
+          started: {{queueData?.datetimeStarted|date:"dd.MM.yy HH:mm"}}</mat-list-item>
+        <mat-list-item *ngIf="queueData?.datetimeCompleted">Time
+          completed: {{queueData?.datetimeCompleted|date:"dd.MM.yy HH:mm"}}</mat-list-item>
+        <mat-list-item>Current position in queue: {{queueData?.otherQueues}}</mat-list-item>
+
+      </mat-list>
+      <ngx-qrcode [value]="currentUrl" *ngIf="currentUrl"></ngx-qrcode>
+
+    </mat-card-content>
+  </mat-card>
+</div>

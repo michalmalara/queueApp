@@ -2,7 +2,7 @@ import {bootstrapApplication} from "@angular/platform-browser";
 import {AppComponent} from "./app/app.component";
 import {provideRouter} from "@angular/router";
 import {ROUTES} from "./app/routes";
-import {enableProdMode, importProvidersFrom} from "@angular/core";
+import {importProvidersFrom} from "@angular/core";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {TokenInterceptor} from "./app/features/auth/interceptors/http-token-interceptor";
