@@ -8,7 +8,7 @@ import {catchError, tap} from "rxjs/operators";
   providedIn: 'root'
 })
 export class RestClientService {
-  private _basicRoute = 'api/'
+  private _basicRoute = 'http://0.0.0.0:8080/api/'
 
   constructor(private httpClient: HttpClient) {
   }

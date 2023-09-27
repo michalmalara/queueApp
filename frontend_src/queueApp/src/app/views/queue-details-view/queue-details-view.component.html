@@ -17,10 +17,15 @@
         <mat-list-item *ngIf="queueData?.datetimeCompleted">Time
           completed: {{queueData?.datetimeCompleted|date:"dd.MM.yy HH:mm"}}</mat-list-item>
         <mat-list-item>Current position in queue: {{queueData?.otherQueues}}</mat-list-item>
-
       </mat-list>
-      <ngx-qrcode [value]="currentUrl" *ngIf="currentUrl"></ngx-qrcode>
-
+      <div class="queue-details-card-qrcode">
+        Scan this QR code to check your queue status on your phone:
+        <div class="queue-details-card-qrcode-img">
+          <a href="{{currentUrl}}">
+            <ngx-qrcode [value]="currentUrl" [alt]="currentUrl" *ngIf="currentUrl"></ngx-qrcode>
+          </a>
+        </div>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

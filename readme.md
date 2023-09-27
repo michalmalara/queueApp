@@ -24,7 +24,7 @@ status, and can be called to proper counters.
 4. Run command `docker-compose exec web python manage.py loaddata db.json` in the root directory to populate database
    with
    test data
-3. The application can be reached on url 0.0.0.0:8080
+3. The application can be reached on url http://localhost:8080/
 
 ## Usage
 
@@ -48,10 +48,20 @@ Account for kiosk that can be used by customers to sign in to queues
 - username: kiosk
 - password: kioskpass1234
 
+### Swagger
+
+Application has swagger documentation. To access it, go to url http://localhost:8080/api/swagger/
+First, use endpoint /api/token/ with credentials mentioned above, to get access token. Then, click on Authorize button
+and enter the token in the dialog box, like so:
+
+`Bearer <access_token>`
+
+After that, you can use all endpoints as a chosen user.
+
 ### Managing users and cases
 
 Cases that customers might be interested and in and users can be managed in admin panel. To access admin panel, go to
-url http://0.0.0.0:8080/admin/ and log in with admin credentials.
+url http://localhost:8080/admin/ and log in with admin credentials.
 
 ### Signing in to queues
 
@@ -64,7 +74,7 @@ Example:
 }
 ```
 
-Customer can subscribe to his case via websockets. To do so, connect to url ws://0.0.0.0:8080/ws/queue/{queue_id}/
+Customer can subscribe to his case via websockets. To do so, connect to url ws://localhost:8080/ws/queue/{queue_id}/
 where queue_id is the id of the queue that customer wants to subscribe to. After connecting, customer will receive a
 message with new statue every time someone is called to the counter.
 
@@ -76,3 +86,20 @@ url http://localhost:8080/api/queue/call-next/ with empty body.
 ## Testing
 
 run command `docker-compose exec web pytest` in the root directory
+
+## Frontend
+
+The frontend is available on http://localhost:8080/
+
+### Worker view
+
+You can log in as a worker with credentials mentioned above using url http://localhost:8080/login
+After that, you need to choose on which station you are working. You can do that by choosing it from a dropdown menu.
+To call a customer, click on the button "Call next customer". It will display details of your customers case. If there
+is no customer in the queue, you will get a popup message.
+
+As a customer, you can use http://localhost:8080/kiosk view (log in as kiosk user). This view is meant to be used on a
+touch screen placed in a waiting room in kiosk mode. Customer can choose a case they came and receive a number, under
+which they will be called.
+
+Next views in progress...

@@ -1,4 +1,5 @@
 import json
+import logging
 
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
@@ -14,6 +15,8 @@ class QueueConsumer(WebsocketConsumer):
         )
 
         self.accept()
+        print(f"Consumer connected to queue {self.queue_id}")
+        self.send(text_data=json.dumps({"message": "Connected"}))
 
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
